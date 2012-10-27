@@ -1,5 +1,4 @@
 var io = require('socket.io')
-  , utils = require('./utils')
   , sock
   , rooms = {}
   , clients = {}
