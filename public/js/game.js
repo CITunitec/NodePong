@@ -77,7 +77,7 @@ window.init = (function() {
   function startWait(state) {
     owner = true
     $newGame.fadeOut(500, function() {
-      $wait.find('.code').html(state.players[0].id)
+      $wait.find('.code').html(state.players[0].code)
       $wait.fadeIn(500)
     })
   }
@@ -105,7 +105,7 @@ window.init = (function() {
       ball.P[0] = map.center[0]
       ball.P[1] = map.center[1]
       if (owner) {
-        ball.V[1] /= ball.V[1] * 0.8
+        ball.V[1] /= ball.V[1] * 0.9
         ball.V[1] = 0
       }
       if (state) {

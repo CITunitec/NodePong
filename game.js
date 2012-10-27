@@ -1,7 +1,8 @@
 var io = require('socket.io')
+  , utils = require('./utils')
   , sock
   , rooms = {}
-  , clients = {}
+  , clients = { dummy : true }
 
 exports.init = function(server) {
   sock = io.listen(server)
@@ -10,26 +11,33 @@ exports.init = function(server) {
 
 
 function connected(client) {
-  var room
-    , iam
+  var iam
     , enemy
-  clients[client.id] = client
+    , code = 'dummy' // This value is unimportant
+    , room // The code of the room owner
+
+  while (clients[code]) {
+    code = utils.shortcode()
+  }
+
+  clients[code] = client
+
   client.on('new', function() {
     console.log('new')
-    room = client.id
+    room = code
     iam = 0
     rooms[room] = [{
-      id     : client.id
+      code   : code
     , points : 0
     }]
     client.emit('ready', {
       alright : true
-    , players : rooms[client.id]
+    , players : rooms[room]
     })
   })
 
-  client.on('join', function(_room) {
-    room = _room
+  client.on('join', function(_code) {
+    room = _code
     if (!rooms[room]) {
       return
     }
@@ -37,8 +45,9 @@ function connected(client) {
     var alright = rooms[room] && rooms[room].length === 1
       , ready
     if (alright) {
+      // There is such room
       rooms[room][1] = {
-        id     : client.id
+        code   : code
       , points : 0
       }
     }
@@ -47,7 +56,7 @@ function connected(client) {
     , players : rooms[room]
     }
     client.emit('ready', ready)
-    clients[rooms[room][0].id].emit('ready', ready)
+    clients[rooms[room][0].code].emit('ready', ready)
   })
 
   client.on('moved', function(y) {
@@ -55,7 +64,7 @@ function connected(client) {
       return
     }
     if (!enemy) {
-      enemy = clients[rooms[room][iam ^ 1].id]
+      enemy = clients[rooms[room][iam ^ 1].code]
     }
     if (enemy && enemy.emit) {
       enemy.emit('moved', y)
@@ -67,7 +76,7 @@ function connected(client) {
       return
     }
     if (!enemy) {
-      enemy = clients[rooms[room][iam ^ 1].id]
+      enemy = clients[rooms[room][iam ^ 1].code]
     }
     if (enemy && enemy.emit) {
       enemy.emit('ball', ball)
@@ -81,8 +90,8 @@ function connected(client) {
   })
 
   client.on('disconnect', function() {
-    if (rooms[client.id]) {
-      delete rooms[client.id]
+    if (rooms[room]) {
+      delete rooms[room]
     }
     client.emit('user disconnected')
     console.log('Disconnected')
