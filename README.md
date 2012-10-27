@@ -2,6 +2,10 @@
 
 With Node.js, Express, Stylus, Socket.io and jQuery
 
+Try it online thanks to [Nodejitsu](http://nodejitsu.com/): [Pong Online](http://sadasant.pong.jit.su/).
+
+Small advertising: Nodejitsu is the best Node PaaS EVER.
+
 ## How to run it
 
 Download the sources:
@@ -19,8 +23,7 @@ To install the dependencies, then run it with **node**:
 And finally go to: <http://localhost:3000>
 
 You'll need at least two browsers tabs to play, or two browsers, or two
-computers in the same network, or a remote server (if you do, please
-let me know).
+computers in the same network, or a remote server.
 
 [License](http://sadasant.com/license)
 
