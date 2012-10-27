@@ -105,8 +105,8 @@ window.init = (function() {
       ball.P[0] = map.center[0]
       ball.P[1] = map.center[1]
       if (owner) {
-        ball.V[1] /= ball.V[1]
         ball.V[1] = 0
+        ball.dt /= 2
       }
       if (state) {
         if (owner) {
