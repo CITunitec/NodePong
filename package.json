@@ -2,7 +2,7 @@
 , "description" : "Pong with WebSockets"
 , "version"     : "0.0.1"
 , "homepage"    : ""
-, "repository"  : ""
+, "repository"  : "https://github.com/CITUnitec/NodePong"
 , "author"      : "Daniel Rodríguez <http : //sadasant.com/>"
 , "private"     : false
 , "scripts"     :
