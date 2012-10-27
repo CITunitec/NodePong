@@ -29,8 +29,8 @@ window.init = (function() {
     , ball  = {
         P   : [0, 0] // Position
       , V   : [-1, 0]
-      , dt  : 3 // Frames per Second
-      , dto : 3 // fps original value
+      , dt  : 4 // Frames per Second
+      , dto : 4 // fps original value
       , dtf : 0.5 // fps growth factor
       }
     , points = [0, 0]
