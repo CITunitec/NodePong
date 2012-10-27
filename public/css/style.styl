@@ -1,0 +1,125 @@
+html
+  box-shadow inset 0 5px 100px rgb(#9df)
+  height 100%
+  overflow hidden
+
+body
+  font 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  background #3f9
+  overflow hidden
+
+h1
+  font-size 40px
+  margin 0 0 10px
+  color rgba(#000,.7)
+
+a
+  color #00B7FF
+
+.title
+  text-align center
+
+.hide
+  display none
+
+.code
+  color #0D3
+  display inline-block
+
+#player1, #player2, #ball
+  display none
+
+#player1, #player2
+  width 30px
+  height 100px
+  border-radius 2px
+  box-shadow 1px 1px 5px rgba(#000, .5)
+  position absolute
+
+#player1
+  background #355
+  margin-top 100px
+  margin-left 30px
+
+#player2
+  background #533
+  margin-top 100px
+  margin-left 640px
+
+#ball
+  width 30px
+  height 30px
+  background #333
+  border-radius 15px
+  box-shadow 1px 1px 5px rgba(#000, .5)
+  position absolute
+
+#game
+  width 700px
+  height 350px
+  margin 0 auto
+  border 1px solid #6A8
+  border-radius 10px
+  .points
+    position absolute
+    margin-top -30px
+    font-size 22px
+  .points.player1
+      color #577
+      text-align left
+  .points.player2
+      color #755
+      margin-left 680px
+      text-align right
+
+#lock
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background rgba(#001,.7)
+
+  #newGame, #wait
+    text-align left
+    margin 5% auto
+    width 320px
+    background white
+    box-shadow inset 0 0 50px #FF9
+    border-radius 5px
+    border-bottom 2px solid #DB3
+    padding 20px 40px 30px 40px
+    color #330
+
+  #newGame
+    input
+      background #ffd
+      border 1px solid #995
+      border-radius 3px
+      padding 2px
+      margin 5px 0
+    .join, .new
+      color white
+      font-weight bold
+      text-shadow 1px 1px 0 #5DA
+                , 0 0 5px #5DA
+                , 0 0 10px #5DA
+      padding 5px 10px
+      background #9F9
+      border 0
+      border-bottom 1px solid #5DA
+      border-radius 3px
+      box-shadow 0 0 5px rgba(#000,.1)
+               , inset 0 0 10px rgba(#000,.1)
+    .join:hover, .new:hover
+      background #7F7
+      cursor pointer
+    .new
+      font-size 18px
+      padding 25px 20px
+      margin-bottom -10px
+    .or
+      text-align right
+      padding-left 10px
+      input
+      width 200px

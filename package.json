@@ -1,0 +1,22 @@
+{ "name"        : "pong"
+, "description" : "Pong with WebSockets"
+, "version"     : "0.0.1"
+, "homepage"    : ""
+, "repository"  : ""
+, "author"      : "Daniel Rodríguez <http : //sadasant.com/>"
+, "private"     : false
+, "scripts"     :
+  { "start"     : "node app"
+  }
+, "dependencies" :
+  { "express"    : "3.0.x"
+  , "ejs"        : "*"
+  , "stylus"     : "0.28.x"
+  , "nib"        : "0.7.x"
+  , "socket.io"  : "0.9.10"
+  }
+, "engines" :
+  { "node"  : "0.8.5"
+  , "npm"   : "1.1.x"
+  }
+}
