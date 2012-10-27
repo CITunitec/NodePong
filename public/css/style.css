@@ -16,6 +16,16 @@ h1 {
 a {
   color: #00b7ff;
 }
+.by {
+  text-align: right;
+  margin: 15px auto;
+  width: 650px;
+  font-size: 12px;
+  color: #375;
+}
+.by a {
+  color: inherit;
+}
 .title {
   text-align: center;
 }
