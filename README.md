@@ -12,7 +12,11 @@ Get yourself into the NodePong folder, then:
 
     npm install
 
-To install the dependencies, and finally go to: <http://localhost:3000>
+To install the dependencies, then run it with **node**:
+
+    node app.js
+
+And finally go to: <http://localhost:3000>
 
 You'll need at least two browsers tabs to play, or two browsers, or two
 computers in the same network, or a remote server (if you do, please
