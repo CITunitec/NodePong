@@ -17,8 +17,7 @@
     "socket.io": "0.9.10"
   },
   "engines": {
-    "node": "0.8.9",
-    "npm": "1.1.x"
+    "node": "0.8.x",
   },
   "subdomain": "sadasant.pong"
 }
