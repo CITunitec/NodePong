@@ -4,8 +4,10 @@ var io = require('socket.io')
   , rooms = {}
   , clients = { dummy : true }
 
+
 exports.init = function(server) {
   sock = io.listen(server)
+  sock.set('log level', 0)
   sock.on('connection', connected)
 }
 

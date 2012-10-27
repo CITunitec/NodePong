@@ -25,7 +25,7 @@ window.init = (function() {
       , center : []
       }
     , players = [{ $ : null, P : [0, 0] }, { $ : null, P : [0, 0] }]
-    , time  = 20
+    , time  = 10
     , ball  = {
         P   : [0, 0] // Position
       , V   : [-1, 0]
@@ -115,7 +115,7 @@ window.init = (function() {
           setInterval(function() {
             socket.emit('ball', ball)
           }, time)
-          setInterval(moveBall, time)
+          setInterval(moveBall, time * 2)
         } else {
           socket.on('ball', movedBall)
           socket.on('point', point)
