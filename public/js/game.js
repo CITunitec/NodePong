@@ -35,7 +35,7 @@ window.init = (function() {
 
   function startIO(io) {
     console.log(':io')
-    socket = io.connect('http://localhost:3000')
+    socket = io.connect('/')
     socket.on('connect', connected)
     socket.on('ready', ready)
     socket.on('moved', moved)
