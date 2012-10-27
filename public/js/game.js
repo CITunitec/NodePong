@@ -5,7 +5,6 @@ window.init = (function() {
     , socket
     , game
     , owner = false
-    , serve = false
 
   // jQuery Handlers
   var $game
