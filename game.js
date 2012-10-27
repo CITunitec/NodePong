@@ -13,81 +13,138 @@ exports.init = function(server) {
 
 
 function connected(client) {
-  var iam
-    , enemy
-    , code = 'dummy' // This value is unimportant
+  var code = 'dummy' // This value is unimportant
     , room // The code of the room owner
+    , user  = 0
+    , enemy = 0
+    , enemyClient = null
+    , map = {
+        width  : 700
+      , height : 350
+      , center : [
+          335 // 700/2 - 15
+        , 160 // 350/2 - 15
+        ]
+      }
+    , players
+    , ball  = {
+        P   : [map.center[0], map.center[1]] // Position
+      , V   : [-1, 0]
+      , dt  : 5 // Frames per Second
+      , dto : 5 // fps original value
+      , dtf : 0.5 // fps growth factor
+      }
+    , score = [0, 0]
+    , time  = 20
+    , interval
 
+  // Generating the code
   while (clients[code]) {
     code = utils.shortcode()
   }
-
   clients[code] = client
 
   client.on('new', function() {
-    console.log('new')
     room = code
-    iam = 0
-    rooms[room] = [{
-      code   : code
-    , points : 0
-    }]
+    rooms[room] = {
+      players : [ [30, 100] ] // According to the class .player1 in the css
+    }
+    players = rooms[room].players // pointer
+    user  = 0
+    enemy = 1
     client.emit('ready', {
       alright : true
-    , players : rooms[room]
+    , code    : code
     })
   })
 
   client.on('join', function(_code) {
+    var ready
+
     room = _code
-    if (!rooms[room]) {
+    if (rooms[room] === undefined || rooms[room].players.length !== 1) {
       return
     }
-    iam = 1
-    var alright = rooms[room] && rooms[room].length === 1
-      , ready
-    if (alright) {
-      // There is such room
-      rooms[room][1] = {
-        code   : code
-      , points : 0
-      }
-    }
+
+    user  = 1
+    enemy = 0
+    enemyClient = clients[room]
+    rooms[room].players[1] = [640, 100] // According to the class .player2 in the css
+    rooms[room].enemy = code
+    players = rooms[room].players // pointer
+
     ready = {
-      alright : alright
-    , players : rooms[room]
+      alright : true
     }
+
     client.emit('ready', ready)
-    clients[rooms[room][0].code].emit('ready', ready)
+    enemyClient.emit('ready', ready)
   })
+
+  client.on('start game', function() {
+    enemyClient = clients[rooms[room].enemy]
+    interval = setInterval(function() {
+      if (!rooms[room]) {
+        clearInterval(interval)
+      }
+      var messages = {}
+        , i = 0
+        , diffx
+        , diffy
+        , border_left   = ball.P[0]
+        , border_right  = map.width - ball.P[0]
+        , border_top    = ball.P[1]
+        , border_bottom = map.height - ball.P[1]
+      if (border_left < 0) {
+        score[1] += 1
+        messages.score = { who : 1, score : score[1] }
+        return sendMessages(messages)
+      } else
+      if (border_right < 31) {
+        score[0] += 1
+        messages.score = { who : 0, score : score[0] }
+        return sendMessages(messages)
+      } else
+      if (border_top < 0 || border_bottom < 31) {
+        ball.V[1] *= -1
+      } else {
+        for (; i < 2; i++) {
+          diffx = Math.abs(players[i][0] - ball.P[0])
+          diffy = players[i][1] - ball.P[1] + 35
+          if (diffx < 30 && diffy < 65 && diffy > -65) {
+            ball.V[0] *= -1
+            ball.V[1] = diffy / -65
+            ball.dt += Math.abs(ball.V[1])
+            break
+          }
+        }
+      }
+      ball.P[0] += ball.V[0] * ball.dt
+      ball.P[1] += ball.V[1] * ball.dt
+      messages.ball = ball.P
+      sendMessages(messages)
+    }, time)
+  })
+
+  function sendMessages(messages) {
+    var k
+    if (messages.score) {
+      ball.dt = ball.dto + (ball.dtf *= 1.1)
+      ball.V[1] = 0
+      ball.P[0] = map.center[0]
+      ball.P[1] = map.center[1]
+      messages.ball = ball.P
+    }
+    for (k in messages) {
+      client.emit(k, messages[k])
+      enemyClient.emit(k, messages[k])
+    }
+  }
 
   client.on('moved', function(y) {
-    if (!rooms[room]) {
-      return
-    }
-    if (!enemy) {
-      enemy = clients[rooms[room][iam ^ 1].code]
-    }
-    if (enemy && enemy.emit) {
-      enemy.emit('moved', y)
-    }
-  })
-
-  client.on('ball', function(ball) {
-    if (!rooms[room]) {
-      return
-    }
-    if (!enemy) {
-      enemy = clients[rooms[room][iam ^ 1].code]
-    }
-    if (enemy && enemy.emit) {
-      enemy.emit('ball', ball)
-    }
-  })
-
-  client.on('point', function(who) {
-    if (enemy && enemy.emit) {
-      enemy.emit('point', who)
+    if (rooms[room]) {
+      rooms[room].players[user][1] = y
+      enemyClient.emit('moved', y)
     }
   })
 
@@ -95,7 +152,6 @@ function connected(client) {
     if (rooms[room]) {
       delete rooms[room]
     }
-    client.emit('user disconnected')
-    console.log('Disconnected')
+    client.emit('disconnected')
   })
 }

@@ -66,6 +66,8 @@ a {
   border-radius: 15px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
   position: absolute;
+  margin-left: 335px;
+  margin-top: 160px;
 }
 #game {
   width: 700px;
