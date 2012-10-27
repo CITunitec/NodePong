@@ -25,11 +25,13 @@ window.init = (function() {
       , center : []
       }
     , players = [{ $ : null, P : [0, 0] }, { $ : null, P : [0, 0] }]
-    , time = 20
-    , ball = {
-        P  : [0, 0] // Position
-      , V  : [-1, 0]
-      , dt : 4 // Frames per Second
+    , time  = 20
+    , ball  = {
+        P   : [0, 0] // Position
+      , V   : [-1, 0]
+      , dt  : 3 // Frames per Second
+      , dto : 3 // fps original value
+      , dtf : 0.5 // fps growth factor
       }
     , points = [0, 0]
 
@@ -106,7 +108,7 @@ window.init = (function() {
       ball.P[1] = map.center[1]
       if (owner) {
         ball.V[1] = 0
-        ball.dt /= 2
+        ball.dt = ball.dto + (ball.dtf *= 1.1)
       }
       if (state) {
         if (owner) {
@@ -127,21 +129,21 @@ window.init = (function() {
     var i = 0
       , diffx
       , diffy
-      , border_left   = Math.abs(ball.P[0])
-      , border_right  = Math.abs(ball.P[0] - map.width)
+      , border_left   = ball.P[0]
+      , border_right  = map.width - ball.P[0]
       , border_top    = ball.P[1]
-      , border_bottom = Math.abs(ball.P[1] - map.height)
-    if (border_left < 15) {
+      , border_bottom = map.height - ball.P[1]
+    if (border_left < 0) {
       $pp2.html(++points[1])
       socket.emit('point', 1)
       return startGame()
     } else
-    if (border_right < 15) {
+    if (border_right < 31) {
       $pp1.html(++points[0])
       socket.emit('point', 0)
       return startGame()
     } else
-    if (border_top < 0 || border_bottom < 15) {
+    if (border_top < 0 || border_bottom < 31) {
       ball.V[1] *= -1
     } else {
       for (; i < 2; i++) {
