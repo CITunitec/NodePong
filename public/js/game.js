@@ -44,7 +44,6 @@ window.init = (function() {
     $lock.show()
     $new.on('click', function(e) {
       e.preventDefault()
-      console.log(':new')
       socket.emit('new')
     })
     $join.on('click', function(e) {
@@ -122,13 +121,11 @@ window.init = (function() {
     $newGame = $('#newGame')
     $wait = $('#wait').fadeOut(0)
 
-    console.log(':init')
     startIO(io)
   }
 
 })()
 
 window.onload = function() {
-  console.log(':onload')
   window.init(window)
 }
