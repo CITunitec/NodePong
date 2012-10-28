@@ -33,6 +33,7 @@ function connected(client) {
       , dt  : 5 // Frames per Second
       , dto : 5 // fps original value
       , dtf : 0.5 // fps growth factor
+      , maxdt : 10
       }
     , score = [0, 0]
     , time  = 20
@@ -114,7 +115,9 @@ function connected(client) {
           if (diffx < 30 && diffy < 65 && diffy > -65) {
             ball.V[0] *= -1
             ball.V[1] = diffy / -65
-            ball.dt += Math.abs(ball.V[1])
+            if (ball.dt < ball.maxdt) {
+              ball.dt += Math.abs(ball.V[1])
+            }
             break
           }
         }
@@ -129,7 +132,9 @@ function connected(client) {
   function sendMessages(messages) {
     var k
     if (messages.score) {
-      ball.dt = ball.dto + (ball.dtf *= 1.1)
+      if (ball.dt < ball.maxdt) {
+        ball.dt = ball.dto + (ball.dtf *= 1.1)
+      }
       ball.V[1] = 0
       ball.P[0] = map.center[0]
       ball.P[1] = map.center[1]
