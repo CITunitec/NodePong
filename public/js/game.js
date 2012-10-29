@@ -17,6 +17,12 @@ window.init = (function() {
 
   // In-game variables
   var players = [null, null]
+    , ball
+
+  // Avoiding Type Re-creation
+  var str_px = 'px'
+    , str_moved = 'moved'
+    , int_mouse = 100 // Cursor distance span
 
   function startIO(io) {
     socket = io.connect('/')
@@ -75,8 +81,10 @@ window.init = (function() {
       $player1.show()
       $player2.show()
       $ball.show()
-      players[0] = owner ? $player1 : $player2
-      players[1] = owner ? $player2 : $player1
+      ball = $ball[0].style
+      players[0] = owner ? $player1[0].style : $player2[0].style
+      players[1] = owner ? $player2[0].style : $player1[0].style
+      console.log(ball, players)
       if (owner) {
         socket.emit('start game')
       }
@@ -89,21 +97,19 @@ window.init = (function() {
   }
 
   function moveBall(P) {
-    $ball.css({
-      'margin-left' : P[0]
-    , 'margin-top'  : P[1]
-    })
+    ball.marginLeft = P[0] + str_px
+    ball.marginTop  = P[1] + str_px
   }
 
   function movePlayer(e) {
-    var y = e.pageY - 100
-    players[0].css({ 'margin-top' : y })
-    socket.emit('moved', y)
+    var y = e.pageY - int_mouse
+    players[0].marginTop = y + str_px
+    socket.emit(str_moved, y)
   }
 
   function moved(y) {
     if (players[1]) {
-      players[1].css({ 'margin-top' : y })
+      players[1].marginTop = y + str_px
     }
   }
 

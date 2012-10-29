@@ -84,6 +84,9 @@ function connected(client) {
 
   client.on('start game', function() {
     enemyClient = clients[rooms[room].enemy]
+    // My excuse to this is that it should not be created for every user,
+    // but only for the owners of the game.
+    // It can't be out because it uses scope variables.
     interval = setInterval(function() {
       if (!rooms[room]) {
         clearInterval(interval)
@@ -131,14 +134,23 @@ function connected(client) {
 
   function sendMessages(messages) {
     var k
+      , v
     if (messages.score) {
       if (ball.dt < ball.maxdt) {
         ball.dt = ball.dto + (ball.dtf *= 1.1)
       }
+      v = ball.V[0]
+      ball.V[0] = 0
       ball.V[1] = 0
       ball.P[0] = map.center[0]
       ball.P[1] = map.center[1]
       messages.ball = ball.P
+
+      // Reposition delay
+      setTimeout(function() {
+        ball.V[0] = v
+      }, 500)
+
     }
     for (k in messages) {
       client.emit(k, messages[k])
